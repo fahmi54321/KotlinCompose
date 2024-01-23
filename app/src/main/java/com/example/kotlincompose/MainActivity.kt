@@ -17,23 +17,62 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.kotlincompose.composes.GreetingList
+import com.example.kotlincompose.composes.GreetingText
+import com.example.kotlincompose.composes.ItemTextWithBgColor
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen()
+            ListScreen()
         }
     }
 }
 
 @Composable
-fun MainScreen(){
+fun ListScreen() {
+
+    var listName = remember {
+        mutableStateListOf("Fahmi", "Abdul")
+    }
+
+    var inputName = remember {
+        mutableStateOf("")
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceEvenly,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        GreetingList(
+            list = listName,
+            {
+                listName.add(inputName.value)
+            },
+            textInput = inputName.value,
+            {
+                inputName.value = it
+            },
+        )
+    }
+}
+
+@Composable
+fun MainScreen() {
     Surface(
         color = Color.Gray,
         modifier = Modifier.fillMaxSize(),
@@ -43,7 +82,7 @@ fun MainScreen(){
             verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
 
-        ) {
+            ) {
             Row(
                 modifier = Modifier
                     .wrapContentSize(),
@@ -64,71 +103,11 @@ fun MainScreen(){
                 ItemTextWithBgColor(bgColor = Color.Blue, text = "Text 2")
             }
         }
-
-
     }
 }
-
-@Composable
-fun GreetingText(name: String) {
-    Text(
-        text = "Hello $name!",
-//        modifier = Modifier
-//            .width(80.dp)
-//            .height(240.dp)
-//        modifier = Modifier
-//            .size(width = 80.dp, height = 240.dp)
-//        modifier = Modifier
-//            .fillMaxSize()
-//        modifier = Modifier
-//            .fillMaxHeight()
-//        modifier = Modifier
-//            .fillMaxWidth()
-//        modifier = Modifier
-//            .fillMaxWidth(fraction = 0.50f)
-        modifier = Modifier
-            .size(width = 200.dp, height = 240.dp)
-            .clickable { }
-            .padding(24.dp),
-
-//        style = TextStyle(
-//            fontSize = 24.sp,
-//            color = Color.Blue,
-//            fontWeight = FontWeight.W600,
-//        )
-        style = MaterialTheme.typography.labelMedium,
-    )
-}
-
-@Composable
-fun GreetingButton(){
-    Button(onClick = {
-
-    }) {
-        GreetingText(name = "Button")
-    }
-}
-
-@Composable
-fun ItemTextWithBgColor(bgColor: Color,text: String){
-    Surface(
-        color = bgColor,
-        modifier = Modifier.wrapContentSize(
-            align = Alignment.TopCenter,
-        ),
-
-        ) {
-        Text(
-            text,
-            style = MaterialTheme.typography.titleLarge,
-            color = Color.Black,
-        )
-    }
-}
-
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewPage() {
-    MainScreen()
+    ListScreen()
 }
