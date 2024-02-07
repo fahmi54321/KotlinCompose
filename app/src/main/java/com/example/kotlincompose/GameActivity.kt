@@ -48,13 +48,13 @@ class GameActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen()
+            MainGameScreen()
         }
     }
 }
 
 @Composable
-fun MainScreen(gameViewModel: GameViewModel = viewModel()) {
+fun MainGameScreen(gameViewModel: GameViewModel = viewModel()) {
 
     val gameUiState by gameViewModel.uiState.collectAsState()
 
@@ -121,6 +121,13 @@ fun MainScreen(gameViewModel: GameViewModel = viewModel()) {
 
             GameStatus(score = gameUiState.score, modifier = Modifier.padding(20.dp))
         }
+    }
+
+    if (gameUiState.isGameOver) {
+        FinalScoreDialog(
+            score = gameUiState.score,
+            onPlayAgain = { gameViewModel.resetGame() }
+        )
     }
 
 
@@ -240,5 +247,5 @@ private fun FinalScoreDialog(
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MainScreen()
+    MainGameScreen()
 }
